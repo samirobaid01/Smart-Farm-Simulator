@@ -21,7 +21,7 @@ const sender =
 
   const devicesContext: DeviceContext[] = [];
 
-  for (const d of config.devices) {
+  for (const d of config.SensorDevices) {
     const ctx = await getDeviceToken(userToken, d.sensorId);
     devicesContext.push(ctx);
   }
@@ -51,3 +51,21 @@ const sender =
     }
   }
 })();
+import { Simulator } from "./core/SimulationRunner.js";
+import { FarmArea } from "./core/Environment.js";
+import { chooseCrop } from "./core/CropLoader.js";
+import { Crop } from "./core/Crop.js";
+
+const simulatorInstance = new Simulator();
+
+// Area 1 with Tomato & Lettuce
+const area1 = new FarmArea();
+const tomato = chooseCrop("Tomato");
+const lettuce = chooseCrop("Lettuce");
+if (tomato) area1.addCrop(new Crop(tomato));
+if (lettuce) area1.addCrop(new Crop(lettuce));
+
+simulatorInstance.addArea(area1);
+
+console.log("[SIM] Starting Smart Farm Simulator...");
+simulatorInstance.start();

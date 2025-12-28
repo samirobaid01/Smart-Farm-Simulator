@@ -1,0 +1,23 @@
+[
+    {
+      "name": "Tomato",
+      "stages": ["SEEDLING","VEGETATIVE","FLOWERING","FRUITING","HARVEST"],
+      "stageDurations": [10,20,15,20,0],
+      "optimalEnv": {
+        "SEEDLING": {"temperature":[22,26],"humidity":[70,85],"soilMoisture":[55,70],"lightLux":[8000,12000]},
+        "VEGETATIVE": {"temperature":[22,28],"humidity":[60,75],"soilMoisture":[45,65],"lightLux":[12000,18000]},
+        "FLOWERING": {"temperature":[24,30],"humidity":[55,70],"soilMoisture":[45,60],"lightLux":[14000,22000]},
+        "FRUITING": {"temperature":[24,28],"humidity":[50,65],"soilMoisture":[50,70],"lightLux":[16000,25000]}
+      }
+    },
+    {
+      "name": "Lettuce",
+      "stages": ["SEEDLING","VEGETATIVE","HARVEST"],
+      "stageDurations": [5,15,0],
+      "optimalEnv": {
+        "SEEDLING": {"temperature":[16,22],"humidity":[60,80],"soilMoisture":[50,65],"lightLux":[4000,8000]},
+        "VEGETATIVE": {"temperature":[16,24],"humidity":[55,75],"soilMoisture":[45,60],"lightLux":[6000,12000]}
+      }
+    }
+  ]
+  
