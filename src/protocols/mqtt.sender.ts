@@ -22,7 +22,7 @@ export class MqttSender implements TelemetrySender {
       client.publish(
         topic,
         JSON.stringify({
-          ...buildTelemetryPayload(),
+          ...telemetryPayload,
           token: ctx.deviceToken,
         }),
         { qos: 1 }

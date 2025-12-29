@@ -1,13 +1,29 @@
-import { buildTelemetryPayload } from "../payload/payload.builder.js";
+import { buildAllTelemetryPayloads, buildBatchPayload } from "../payload/payload.builder.js";
 import { TelemetrySender, DeviceContext } from "../types.js";
 
 export class TelemetryService {
-  constructor(private sender: TelemetrySender) {}
+  constructor(
+    private sender: TelemetrySender,
+    private deviceSensorMap: Map<string, number>
+  ) {}
 
   async execute(devicesContext: DeviceContext[]): Promise<void> {
     for (const deviceContext of devicesContext) {
+      const sensorId = this.deviceSensorMap.get(deviceContext.deviceUuid);
+      if (!sensorId) {
+        console.error(`No sensorId found for device: ${deviceContext.deviceUuid}`);
+        continue;
+      }
       console.log("Executing telemetry for device:", deviceContext.deviceUuid);
-      await this.sender.send(deviceContext, buildTelemetryPayload());
+      
+      // Get all telemetry payloads for this sensor (one for each variable)
+      const telemetryPayloads = buildAllTelemetryPayloads(sensorId);
+      
+      // Send each telemetry variable separately
+      for (const payload of telemetryPayloads) {
+        console.log(`Sending ${payload.variableName} for sensor ${sensorId}`);
+        await this.sender.send(deviceContext, payload);
+      }
     }
   }
 
@@ -15,7 +31,12 @@ export class TelemetryService {
     if (!this.sender.sendBatch) return;
 
     for (const device of devices) {
-      await this.sender.sendBatch(device);
+      const sensorId = this.deviceSensorMap.get(device.deviceUuid);
+      if (!sensorId) {
+        console.error(`No sensorId found for device: ${device.deviceUuid}`);
+        continue;
+      }
+      await this.sender.sendBatch(device, sensorId);
     }
   }
 }

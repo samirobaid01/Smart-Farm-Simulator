@@ -20,14 +20,16 @@ const sender =
   const userToken = await login();
 
   const devicesContext: DeviceContext[] = [];
+  const deviceSensorMap = new Map<string, number>(); // Map deviceUuid to sensorId
 
   for (const d of config.SensorDevices) {
     const ctx = await getDeviceToken(userToken, d.sensorId);
     devicesContext.push(ctx);
+    deviceSensorMap.set(ctx.deviceUuid, d.sensorId);
   }
   
 
-  const service = new TelemetryService(sender);
+  const service = new TelemetryService(sender, deviceSensorMap);
   while (true) {
     console.log("Executing telemetry for devices");
     console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
