@@ -6,6 +6,7 @@ export class TelemetryService {
 
   async execute(devicesContext: DeviceContext[]): Promise<void> {
     for (const deviceContext of devicesContext) {
+      console.log("Executing telemetry for device:", deviceContext.deviceUuid);
       await this.sender.send(deviceContext, buildTelemetryPayload());
     }
   }

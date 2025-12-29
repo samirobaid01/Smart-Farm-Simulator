@@ -30,13 +30,11 @@ const sender =
   const service = new TelemetryService(sender);
   while (true) {
     console.log("Executing telemetry for devices");
-    await service.execute(devicesContext);
-    await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
     console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
     if (config.execution.mode === "once") {
         console.log("Execution mode is once, exiting...");
         await service.execute(devicesContext);
-        break;
+        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
     }
     if (config.execution.mode === "loop") {
         await service.execute(devicesContext);
@@ -51,21 +49,22 @@ const sender =
     }
   }
 })();
-import { Simulator } from "./core/SimulationRunner.js";
-import { FarmArea } from "./core/Environment.js";
-import { chooseCrop } from "./core/CropLoader.js";
-import { Crop } from "./core/Crop.js";
 
-const simulatorInstance = new Simulator();
+// import { Simulator } from "./core/SimulationRunner.js";
+// import { FarmArea } from "./core/Environment.js";
+// import { chooseCrop } from "./core/CropLoader.js";
+// import { Crop } from "./core/Crop.js";
 
-// Area 1 with Tomato & Lettuce
-const area1 = new FarmArea();
-const tomato = chooseCrop("Tomato");
-const lettuce = chooseCrop("Lettuce");
-if (tomato) area1.addCrop(new Crop(tomato));
-if (lettuce) area1.addCrop(new Crop(lettuce));
+// const simulatorInstance = new Simulator();
 
-simulatorInstance.addArea(area1);
+// // Area 1 with Tomato & Lettuce
+// const area1 = new FarmArea();
+// const tomato = chooseCrop("Tomato");
+// const lettuce = chooseCrop("Lettuce");
+// if (tomato) area1.addCrop(new Crop(tomato));
+// if (lettuce) area1.addCrop(new Crop(lettuce));
 
-console.log("[SIM] Starting Smart Farm Simulator...");
-simulatorInstance.start();
+// simulatorInstance.addArea(area1);
+
+// console.log("[SIM] Starting Smart Farm Simulator...");
+// simulatorInstance.start();

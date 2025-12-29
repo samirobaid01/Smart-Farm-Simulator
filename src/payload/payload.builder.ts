@@ -6,8 +6,8 @@ import { TelemetryPayload, BatchTelemetryPayload } from "../types.js";
  */
 export function buildTelemetryPayload() {
   return {
-    telemetryDataId: 1,
-    value: (Math.random() * 10 + 20).toFixed(2),
+    variableName: 'pH Level',
+    value: (Math.random() * 5 + 5).toFixed(2),
     recievedAt: new Date().toISOString(),
   };
 }
@@ -20,17 +20,17 @@ export function buildBatchPayload() {
   return {
     dataStreams: [
       {
-        telemetryDataId: 1,
+        variableName: 'pH Level',
         value: (Math.random() * 10 + 20).toFixed(2),
         recievedAt: new Date().toISOString(),
       },
       {
-        telemetryDataId: 1,
+        variableName: 'pH Level',
         value: (Math.random() * 10 + 20).toFixed(2),
         recievedAt: new Date().toISOString(),
       },
       {
-        telemetryDataId: 1,
+        variableName: 'pH Level',
         value: (Math.random() * 10 + 20).toFixed(2),
         recievedAt: new Date().toISOString(),
       },

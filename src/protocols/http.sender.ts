@@ -6,6 +6,7 @@ import { config } from "../config/config.js";
 export class HttpSender implements TelemetrySender {
   async send(ctx: DeviceContext): Promise<void> {
     const payload = buildTelemetryPayload();
+    console.log("Sending telemetry payload:", payload);
 
     await axios.post(`${config.baseUrl}/datastreams/token`, payload, {
       headers: {

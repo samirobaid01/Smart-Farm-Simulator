@@ -8,7 +8,7 @@ export const config = {
     password: "1234Abcd",
   },
 
-  protocol: "mqtt" as ProtocolType,
+  protocol: "http" as ProtocolType,
 
   execution: {
     mode: "once" as "once" | "batch" | "loop",
@@ -16,7 +16,11 @@ export const config = {
     delayMs: 20000,
   },
 
-  SensorDevices: [{ sensorId: 1 }, { sensorId: 2 }],
+  SensorDevices: [
+    {
+      sensorId: 1,
+    }
+  ],
 
   mqtt: {
     broker: "mqtt://localhost:1883",
