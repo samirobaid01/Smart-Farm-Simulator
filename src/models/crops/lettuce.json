@@ -1,0 +1,13 @@
+{
+  "name": "Lettuce",
+  "optimal": {
+    "temperature": [16, 24],
+    "humidity": [55, 75],
+    "soilMoisture": [45, 60],
+    "lightLux": [6000, 12000]
+  },
+  "growthRate": 0.015,
+  "healthDecayRate": 0.08
+}
+
+

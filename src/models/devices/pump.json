@@ -1,0 +1,8 @@
+{
+  "type": "WATER_PUMP",
+  "effects": {
+    "soilMoisture": 2.0,
+    "pH": -0.1
+  }
+}
+

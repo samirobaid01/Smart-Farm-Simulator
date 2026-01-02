@@ -1,0 +1,9 @@
+{
+  "temperature": [-0.2, 0.2],
+  "humidity": [-0.5, 0.5],
+  "soilMoisture": [-0.3, 0.3],
+  "lightLux": [-100, 100],
+  "oxygenPPM": [-5, 5],
+  "pH": [0.0, 0.05]
+}
+

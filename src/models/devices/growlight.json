@@ -1,0 +1,8 @@
+{
+  "type": "GROW_LIGHT",
+  "effects": {
+    "lightLux": 5000
+  }
+}
+
+

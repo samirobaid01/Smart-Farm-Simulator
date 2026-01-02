@@ -1,0 +1,8 @@
+{
+  "type": "HUMIDIFIER",
+  "effects": {
+    "humidity": 1.5
+  }
+}
+
+

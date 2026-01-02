@@ -1,0 +1,9 @@
+{
+  "type": "FAN",
+  "effects": {
+    "temperature": -0.3,
+    "humidity": -0.2
+  }
+}
+
+

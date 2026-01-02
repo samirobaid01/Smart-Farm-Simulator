@@ -39,4 +39,12 @@ export class TelemetryService {
       await this.sender.sendBatch(device, sensorId);
     }
   }
+
+  /**
+   * Send a single telemetry payload
+   * Used by simulation adapters
+   */
+  async sendPayload(deviceContext: DeviceContext, payload: import("../types.js").TelemetryPayload): Promise<void> {
+    await this.sender.send(deviceContext, payload);
+  }
 }

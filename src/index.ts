@@ -4,8 +4,12 @@ import { TelemetryService } from "./core/TelemetryService.js";
 import { HttpSender } from "./protocols/http.sender.js";
 import { MqttSender } from "./protocols/mqtt.sender.js";
 import { CoapSender } from "./protocols/coap.sender.js";
-import { startSocketListener } from "./socket/socket.listener.js";
+import { startSocketListener, setDeviceCommandHandler } from "./socket/socket.listener.js";
 import { DeviceContext } from "./types.js";
+import { ClosedLoopSimulation } from "./core/ClosedLoopSimulation.js";
+
+// Enable closed-loop simulation mode (set to true to enable)
+const ENABLE_CLOSED_LOOP_SIMULATION = true;
 
 startSocketListener();
 
@@ -30,24 +34,55 @@ const sender =
   
 
   const service = new TelemetryService(sender, deviceSensorMap);
-  while (true) {
-    console.log("Executing telemetry for devices");
-    console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
-    if (config.execution.mode === "once") {
+
+  // Closed-loop simulation mode
+  if (ENABLE_CLOSED_LOOP_SIMULATION) {
+    console.log("🔄 Starting CLOSED-LOOP SIMULATION mode");
+    console.log("📋 Flow: Send sensor data → Receive device commands → Update environment → Loop");
+
+    // Initialize closed-loop simulation (initial values from config, no hardcoding)
+    const simulation = new ClosedLoopSimulation(
+      service,
+      devicesContext,
+      deviceSensorMap
+    );
+
+    // Set up device command handler
+    setDeviceCommandHandler((command) => {
+      simulation.processDeviceCommand(command);
+    });
+
+    // Start the simulation loop
+    simulation.start(config.execution.delayMs || 5000);
+
+    // Keep process alive
+    process.on("SIGINT", () => {
+      console.log("\n⏹️  Stopping simulation...");
+      simulation.stop();
+      process.exit(0);
+    });
+  } else {
+    // Original mode (unchanged)
+    while (true) {
+      console.log("Executing telemetry for devices");
+      console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
+      if (config.execution.mode === "once") {
         console.log("Execution mode is once, exiting...");
         await service.execute(devicesContext);
-        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
-    }
-    if (config.execution.mode === "loop") {
+        await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
+        break;
+      }
+      if (config.execution.mode === "loop") {
         await service.execute(devicesContext);
-        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
+        await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
         console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
-    }
-    if (config.execution.mode === "batch") {
+      }
+      if (config.execution.mode === "batch") {
         console.log("Execution mode is batch, executing batch...");
         await service.executeBatch(devicesContext);
-        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
+        await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
         console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
+      }
     }
   }
 })();

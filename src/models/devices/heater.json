@@ -1,0 +1,8 @@
+{
+  "type": "HEATER",
+  "effects": {
+    "temperature": 0.8
+  }
+}
+
+

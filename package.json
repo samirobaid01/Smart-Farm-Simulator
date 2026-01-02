@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && npm run copy:assets",
-    "copy:assets": "cpx \"src/config/**/*\" dist/config",
+    "copy:assets": "cpx \"src/config/**/*\" dist/config && cpx \"src/models/**/*\" dist/models",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "debug:ts": "node --inspect-brk -r ts-node/register src/index.ts",

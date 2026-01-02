@@ -1,0 +1,15 @@
+{
+  "tickIntervalMs": 5000,
+  "initialEnvironment": {
+    "temperature": 22,
+    "humidity": 60,
+    "soilMoisture": 50,
+    "lightLux": 10000,
+    "oxygenPPM": 21,
+    "pH": 2.5
+  },
+  "failureProbability": 0.01,
+  "enableFailures": true,
+  "enableCropSimulation": true
+}
+
