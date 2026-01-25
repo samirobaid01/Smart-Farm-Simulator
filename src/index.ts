@@ -6,8 +6,30 @@ import { MqttSender } from "./protocols/mqtt.sender.js";
 import { CoapSender } from "./protocols/coap.sender.js";
 import { startSocketListener } from "./socket/socket.listener.js";
 import { DeviceContext } from "./types.js";
+import { SensorRepository } from "./data/SensorRepository.js";
+import { DeviceRepository } from "./data/DeviceRepository.js";
+import { DeviceStateStore } from "./data/DeviceStateStore.js";
+import { PayloadBuilder } from "./payload/payload.builder.js";
+import { DeviceStateManager } from "./core/DeviceStateManager.js";
 
-startSocketListener();
+// Initialize repositories
+const sensorRepo = new SensorRepository();
+sensorRepo.loadFromFile();
+
+const deviceRepo = new DeviceRepository();
+deviceRepo.loadFromFile();
+
+const stateStore = new DeviceStateStore();
+stateStore.loadFromFile();
+
+// Initialize managers
+const payloadBuilder = new PayloadBuilder(sensorRepo);
+const deviceStateManager = new DeviceStateManager(deviceRepo, stateStore);
+
+// Setup socket listener with device state change handler
+startSocketListener((event) => {
+  deviceStateManager.processStateChange(event);
+});
 
 const sender =
   config.protocol === "http"
@@ -20,34 +42,41 @@ const sender =
   const userToken = await login();
 
   const devicesContext: DeviceContext[] = [];
+  const deviceSensorMap = new Map<string, number>(); // Map deviceUuid to sensorId
 
-  for (const d of config.devices) {
-    const ctx = await getDeviceToken(userToken, d.sensorId);
+  // Load sensors from config and get device tokens
+  for (const sensorConfig of config.sensors) {
+    const ctx = await getDeviceToken(userToken, sensorConfig.sensorId);
     devicesContext.push(ctx);
+    
+    // Map deviceUuid to sensorId
+    deviceSensorMap.set(ctx.deviceUuid, sensorConfig.sensorId);
   }
-  
 
-  const service = new TelemetryService(sender);
+  const service = new TelemetryService(sender, payloadBuilder, deviceSensorMap);
+
   while (true) {
     console.log("Executing telemetry for devices");
-    await service.execute(devicesContext);
-    await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
     console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
+    
     if (config.execution.mode === "once") {
-        console.log("Execution mode is once, exiting...");
-        await service.execute(devicesContext);
-        break;
+      console.log("Execution mode is once, exiting...");
+      await service.execute(devicesContext);
+      await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
+      break;
     }
+    
     if (config.execution.mode === "loop") {
-        await service.execute(devicesContext);
-        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
-        console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
+      await service.execute(devicesContext);
+      await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
+      console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
     }
+    
     if (config.execution.mode === "batch") {
-        console.log("Execution mode is batch, executing batch...");
-        await service.executeBatch(devicesContext);
-        await new Promise(resolve => setTimeout(resolve, config.execution.delayMs));
-        console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
+      console.log("Execution mode is batch, executing batch...");
+      await service.executeBatch(devicesContext);
+      await new Promise((resolve) => setTimeout(resolve, config.execution.delayMs));
+      console.log(`Waiting for next execution in ${config.execution.delayMs}ms`);
     }
   }
 })();

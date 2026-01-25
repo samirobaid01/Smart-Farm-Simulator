@@ -1,0 +1,58 @@
+{
+  "devices": [
+    {
+      "id": 1,
+      "name": "Main Water Pump",
+      "description": "Main water pump for irrigation system",
+      "uuid": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+      "status": "active",
+      "deviceType": "actuator",
+      "isCritical": true,
+      "metadata": {},
+      "capabilities": {},
+      "deviceStates": [
+        {
+          "id": 1,
+          "deviceId": 1,
+          "stateName": "Pump Power",
+          "dataType": "string",
+          "defaultValue": "off",
+          "allowedValues": ["on", "off"],
+          "status": "active"
+        },
+        {
+          "id": 2,
+          "deviceId": 1,
+          "stateName": "Pump Speed",
+          "dataType": "integer",
+          "defaultValue": 0,
+          "allowedValues": [0, 1, 2, 3, 4, 5],
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "name": "Living Room AC",
+      "description": "AC unit for cooling the greenhouse",
+      "uuid": "123e4567-e89b-12d3-a456-426614174000",
+      "status": "active",
+      "deviceType": "actuator",
+      "isCritical": false,
+      "metadata": {},
+      "capabilities": {},
+      "deviceStates": [
+        {
+          "id": 1,
+          "deviceId": 89,
+          "stateName": "Power",
+          "dataType": "bool",
+          "defaultValue": "off",
+          "allowedValues": ["on", "off"],
+          "status": "active"
+        }
+      ]
+    }
+  ]
+}
+

@@ -4,9 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy:assets",
+    "copy:assets": "cpx \"src/config/**/*\" dist/config && cpx \"src/data/*.json\" dist/data 2>/dev/null || true",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "debug:ts": "node --inspect-brk -r ts-node/register src/index.ts",
+    "debug:js": "node --inspect-brk dist/index.js"
   },
   "keywords": [],
   "author": "",

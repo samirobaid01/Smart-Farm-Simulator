@@ -42,10 +42,10 @@ export interface DeviceTokenApiResponse {
   
   export interface TelemetrySender {
     send(ctx: DeviceContext, telemetryPayload: TelemetryPayload): Promise<void>;
-    sendBatch?(ctx: DeviceContext): Promise<void>;
+    sendBatch?(ctx: DeviceContext, batchPayload?: BatchTelemetryPayload): Promise<void>;
   }
   export interface TelemetryPayload {
-    telemetryDataId: number;
+    variableName: string;
     value: string;
     recievedAt: string;
   }

@@ -1,6 +1,7 @@
 
 import coap, { IncomingMessage, OutgoingMessage } from "coap";
-import { TelemetryPayload, ProtocolContext, TelemetrySender } from "../types.js";
+import { TelemetryPayload, DeviceContext, TelemetrySender, BatchTelemetryPayload } from "../types.js";
+import { config } from "../config/config.js";
 
 /**
  * CoAP Sender
@@ -12,13 +13,13 @@ export class CoapSender implements TelemetrySender {
   host: string;
   port: number;
 
-  constructor(host: string = "localhost", port: number = 5683) {
-    this.host = host;
-    this.port = port;
+  constructor(host?: string, port?: number) {
+    this.host = host || config.coap.host;
+    this.port = port || config.coap.port;
   }
 
   /** Send a telemetry payload */
-  async send(ctx: ProtocolContext, payload: TelemetryPayload): Promise<void> {
+  async send(ctx: DeviceContext, payload: TelemetryPayload): Promise<void> {
     return new Promise((resolve, reject) => {
       const req: OutgoingMessage = coap.request({
         hostname: this.host,
@@ -55,8 +56,48 @@ export class CoapSender implements TelemetrySender {
     });
   }
 
+  async sendBatch(ctx: DeviceContext, batchPayload?: BatchTelemetryPayload): Promise<void> {
+    if (!batchPayload) {
+      throw new Error("Batch payload is required");
+    }
+
+    return new Promise((resolve, reject) => {
+      const req: OutgoingMessage = coap.request({
+        hostname: this.host,
+        port: this.port,
+        pathname: "/datastreams/batch",
+        method: "POST",
+        confirmable: true,
+      });
+
+      const body = JSON.stringify({
+        ...batchPayload,
+        token: ctx.deviceToken,
+        deviceUuid: ctx.deviceUuid,
+      });
+
+      req.write(body);
+
+      req.on("response", (res: IncomingMessage) => {
+        let data = "";
+        res.on("data", (chunk: Buffer) => (data += chunk.toString()));
+        res.on("end", () => {
+          console.log(`📥 CoAP batch response [${ctx.deviceUuid}]:`, data || res.code);
+          resolve();
+        });
+      });
+
+      req.on("error", (err) => {
+        console.error(`❌ CoAP batch error [${ctx.deviceUuid}]:`, err.message);
+        reject(err);
+      });
+
+      req.end();
+    });
+  }
+
   /** Observe server updates for a device */
-  observe(ctx: ProtocolContext, path: string = "/datastreams") {
+  observe(ctx: DeviceContext, path: string = "/datastreams") {
     const req: OutgoingMessage = coap.request({
       hostname: this.host,
       port: this.port,

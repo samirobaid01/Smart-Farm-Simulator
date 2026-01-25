@@ -1,0 +1,156 @@
+{
+  "sensors": [
+    {
+      "id": 1,
+      "name": "pH Meter - NFT System",
+      "description": "Digital pH sensor for nutrient solution monitoring",
+      "uuid": "5374f780-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 2,
+          "variableName": "pH Sensor Voltage",
+          "datatype": "float",
+          "sensorId": 1,
+          "minRange": 9,
+          "maxRange": 11
+        },
+        {
+          "id": 1,
+          "variableName": "pH Level",
+          "datatype": "float",
+          "sensorId": 1,
+          "minRange": 1,
+          "maxRange": 14
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "EC/TDS Meter - Main Tank",
+      "description": "Electrical conductivity and total dissolved solids sensor",
+      "uuid": "53751152-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 5,
+          "variableName": "Solution Temperature",
+          "datatype": "float",
+          "sensorId": 2,
+          "minRange": 0.5,
+          "maxRange": 3.5
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Water Temperature Probe - DWC",
+      "description": "Submersible temperature sensor for deep water culture",
+      "uuid": "5375133c-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 6,
+          "variableName": "Water Temperature",
+          "datatype": "float",
+          "sensorId": 3,
+          "minRange": 16,
+          "maxRange": 26
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Dissolved Oxygen Sensor",
+      "description": "Measures oxygen levels in hydroponic solution",
+      "uuid": "53751436-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 8,
+          "variableName": "Dissolved Oxygen",
+          "datatype": "float",
+          "sensorId": 7,
+          "minRange": 50,
+          "maxRange": 100
+        },
+        {
+          "id": 8,
+          "variableName": "DO Saturation",
+          "datatype": "float",
+          "sensorId": 4,
+          "minRange": 5,
+          "maxRange": 10
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Water Level Sensor - Reservoir",
+      "description": "Ultrasonic water level monitor for main tank",
+      "uuid": "53751706-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 10,
+          "variableName": "Tank Capacity",
+          "datatype": "percentage",
+          "sensorId": 5,
+          "minRange": 20,
+          "maxRange": 95
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "PAR Light Sensor",
+      "description": "Photosynthetically active radiation measurement",
+      "uuid": "537517c4-32fa-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 12,
+          "variableName": "Daily Light Integral",
+          "datatype": "float",
+          "sensorId": 6,
+          "minRange": 150,
+          "maxRange": 700
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "SoilMoisture-AG11 t",
+      "description": "Capacitive soil moisture sensor",
+      "uuid": "a73ec4bc-3300-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 32,
+          "variableName": "signal_strength",
+          "datatype": "integer",
+          "sensorId": 16,
+          "minRange": 20,
+          "maxRange": 80
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "TempHumidity-AG11",
+      "description": "DHT22 temperature and humidity sensor",
+      "uuid": "a73ece30-3300-11f0-ad04-70f787be2478",
+      "status": "active",
+      "telemetryData": [
+        {
+          "id": 33,
+          "variableName": "air_temperature",
+          "datatype": "float",
+          "sensorId": 17,
+          "minRange": 16,
+          "maxRange": 30
+        }
+      ]
+    }
+  ]
+}
